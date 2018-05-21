@@ -27,6 +27,7 @@ Contribution are welcome, for patch and issue : use [gitlab](https://gitlab.com/
 - Licence : GNU Affero General Public License <https://www.gnu.org/licenses/agpl-3.0.html>
 
 ## Changelog
+- 2018-05-21 _0.0.4_ : fix buttons and css
 - 2018-05-21 _0.0.3_ : fix HTML validity
 - 2018-05-21 _0.0.2_ : fix for dropdown
 - 2018-05-20 _0.0.1_ : initial realease

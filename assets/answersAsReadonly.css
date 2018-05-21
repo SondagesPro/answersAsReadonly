@@ -1,12 +1,15 @@
 /* This file is part of answersAsReadonly limesurvey plugin distributed as AGPL */
 /* This file is distributed with a CC0 licence */
 /* @license magnet:?xt=urn:btih:90dc5c0be029de84e523b9b3922520e79e0e6f08&dn=cc0.txt CC0 */
-input[readonly],input[type="radio"][readonly], input[type="checkbox"][readonly],  input[type="text"][readonly],
-.answersasreadonly-attribute input
-{
-    cursor: not-allowed;
+.answersasreadonly-attribute .answer-item ,.answersasreadonly-attribute .answer-item label{
+    opacity: 0.80;
 }
-.answersasreadonly-attribute .answer-item 
-{
-    opacity:0.80
+.answersasreadonly-attribute .answer-item label,
+.answersasreadonly-attribute .answer-item input,
+.answersasreadonly-attribute .answer-item select,
+.answersasreadonly-attribute .answer-item button,
+.js .answersasreadonly-attribute td.radio-item,
+.js .answersasreadonly-attribute td.checkbox-item,
+.answersasreadonly-attribute .answer-item {
+    cursor: not-allowed;
 }
