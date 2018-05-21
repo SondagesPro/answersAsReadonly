@@ -5,7 +5,7 @@
  * @author Denis Chenu <denis@sondages.pro>
  * @copyright 2018 Denis Chenu <http://www.sondages.pro>
  * @license AGPL v3
- * @version 0.0.1
+ * @version 0.0.2
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE as published by
@@ -39,10 +39,11 @@ class answersAsReadonly extends PluginBase
   {
     $oEvent=$this->getEvent();
     $aAttributes=QuestionAttribute::model()->getQuestionAttributes($oEvent->get('qid'));
-    if(isset($aAttributes['readonly']) && $aAttributes['readonly'] ){
+    if(isset($aAttributes['readonly']) && $aAttributes['readonly'] ) {
         $answer = $this->getEvent()->get("answers");
         $answer = str_replace("<input","<input readonly ",$answer);
         $answer = str_replace("<textarea","<textarea readonly ",$answer);
+        $answer = str_replace("<select","<select readonly ",$answer);
         $this->getEvent()->set("answers",$answer);
         $this->getEvent()->set("class",$this->getEvent()->get("class")." answersasreadonly-attribute");
         $this->answersAsReadonlyAddScript();
@@ -74,11 +75,10 @@ class answersAsReadonly extends PluginBase
     public function answersAsReadonlyAddScript()
     {
         /* Quit if is done */
-
         if(array_key_exists(get_class($this),Yii::app()->getClientScript()->packages)) {
             return;
         }
-        /* Add package if not exist (allow to use another one in config */
+        /* Add package if not exist (allow to use another one in config) */
         if(!Yii::app()->clientScript->hasPackage(get_class($this))) {
             Yii::setPathOfAlias(get_class($this),dirname(__FILE__));
             Yii::app()->clientScript->addPackage(get_class($this), array(

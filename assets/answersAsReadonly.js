@@ -7,6 +7,14 @@ $(document).on("click",".answersasreadonly-attribute .checkbox-item",function() 
 $(document).on("click",".answersasreadonly-attribute .radio-item",function() {
     return false;
 });
+$(document).on("click",".answersasreadonly-attribute .dropdown-item select",function() {
+    return false;
+});
 $(document).on("keyup keypress keydown",".answersasreadonly-attribute .text-item",function() {
-    return false; // Not really needed
+    //return false; // Diable it : not needed and broke Ctrl + tab
+});
+$(document).on("ready pjax:complete",function() {
+    $(".answersasreadonly-attribute .dropdown-item select option").each(function() {
+        $(this).prop('disabled',!$(this).prop('selected'));
+    });
 });
