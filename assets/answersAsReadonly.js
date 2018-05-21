@@ -20,4 +20,8 @@ $(document).on("ready pjax:complete",function() {
     $(".answersasreadonly-attribute .button-item").each(function() {
         $(this).addClass("disabled");
     });
+    $(".answersasreadonly-attribute a.upload").each(function() {
+        $(this).addClass("disabled");
+        $(this).prop("disabled",true);
+    });
 });
