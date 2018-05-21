@@ -5,7 +5,7 @@
  * @author Denis Chenu <denis@sondages.pro>
  * @copyright 2018 Denis Chenu <http://www.sondages.pro>
  * @license AGPL v3
- * @version 0.0.2
+ * @version 0.0.3
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE as published by
@@ -41,9 +41,9 @@ class answersAsReadonly extends PluginBase
     $aAttributes=QuestionAttribute::model()->getQuestionAttributes($oEvent->get('qid'));
     if(isset($aAttributes['readonly']) && $aAttributes['readonly'] ) {
         $answer = $this->getEvent()->get("answers");
-        $answer = str_replace("<input","<input readonly ",$answer);
+        $answer = str_replace("type=\"text\"","type=\"text\" readonly ",$answer);
+        $answer = str_replace("type='text'","type='text' readonly ",$answer);
         $answer = str_replace("<textarea","<textarea readonly ",$answer);
-        $answer = str_replace("<select","<select readonly ",$answer);
         $this->getEvent()->set("answers",$answer);
         $this->getEvent()->set("class",$this->getEvent()->get("class")." answersasreadonly-attribute");
         $this->answersAsReadonlyAddScript();

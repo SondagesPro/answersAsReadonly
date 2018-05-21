@@ -3,7 +3,6 @@
 This add a new attribute (advanced setting) in each question to set answers part as “read only”. 
 
 Work in prgress : 
-- current system use readmony attribute even if not allowed on input element
 - all question type with all settings didn't work
 - control is done only via html and javascript, no PHP control is done.
 
@@ -28,5 +27,6 @@ Contribution are welcome, for patch and issue : use [gitlab](https://gitlab.com/
 - Licence : GNU Affero General Public License <https://www.gnu.org/licenses/agpl-3.0.html>
 
 ## Changelog
+- 2018-05-21 _0.0.3_ : fix HTML validity
 - 2018-05-21 _0.0.2_ : fix for dropdown
 - 2018-05-20 _0.0.1_ : initial realease
