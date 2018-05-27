@@ -19,11 +19,11 @@ Work in prgress :
 
 ## Contribute
 
-Contribution are welcome, for patch and issue : use [gitlab](https://gitlab.com/SondagesPro/answersAsReadonly) still the preferred solution.
+Contribution are welcome, for patch and issue : use [gitlab](https://gitlab.com/SondagesPro/answersAsReadonly).
 
 ## Home page & Copyright
 - HomePage <http://extensions.sondages.pro/>
-- Copyright © 2016-2018 Denis Chenu <http://sondages.pro>
+- Copyright © 2016-2018 Denis Chenu <http://sondages.pro> and [contributors](https://gitlab.com/SondagesPro/answersAsReadonly/graphs/master).
 - Licence : GNU Affero General Public License <https://www.gnu.org/licenses/agpl-3.0.html>
 
 ## Changelog
