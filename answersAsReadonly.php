@@ -5,7 +5,7 @@
  * @author Denis Chenu <denis@sondages.pro>
  * @copyright 2018 Denis Chenu <http://www.sondages.pro>
  * @license AGPL v3
- * @version 0.0.5
+ * @version 0.1.0
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE as published by
@@ -40,13 +40,16 @@ class answersAsReadonly extends PluginBase
     $oEvent=$this->getEvent();
     $aAttributes=QuestionAttribute::model()->getQuestionAttributes($oEvent->get('qid'));
     if(isset($aAttributes['readonly']) && $aAttributes['readonly'] ) {
-        $answer = $this->getEvent()->get("answers");
-        $answer = str_replace("type=\"text\"","type=\"text\" readonly ",$answer);
-        $answer = str_replace("type='text'","type='text' readonly ",$answer);
-        $answer = str_replace("<textarea","<textarea readonly ",$answer);
-        $this->getEvent()->set("answers",$answer);
-        $this->getEvent()->set("class",$this->getEvent()->get("class")." answersasreadonly-attribute");
-        $this->answersAsReadonlyAddScript();
+        $currentReadonly = trim(LimeExpressionManager::ProcessStepString($aAttributes['readonly']));
+        if($currentReadonly) {
+            $answer = $this->getEvent()->get("answers");
+            $answer = str_replace("type=\"text\"","type=\"text\" readonly ",$answer);
+            $answer = str_replace("type='text'","type='text' readonly ",$answer);
+            $answer = str_replace("<textarea","<textarea readonly ",$answer);
+            $this->getEvent()->set("answers",$answer);
+            $this->getEvent()->set("class",$this->getEvent()->get("class")." answersasreadonly-attribute");
+            $this->answersAsReadonlyAddScript();
+        }
     }
   }
 
@@ -60,10 +63,11 @@ class answersAsReadonly extends PluginBase
                 'types'     => '15ABCDEFGHIKLMNOPQSTUWYZ!:;|', /* all question types except equation and text display, remove ranking because untested */
                 'category'  => gT('Display'),
                 'sortorder' => 101,
-                'inputtype' => 'switch',
+                'inputtype' => 'text',
                 'caption'   => $this->gT('Show as readonly'),
-                'help'   => $this->gT('Add readonly attribute to all input inside answer part.'),
-                'default'   => 0,
+                'help'   => $this->gT('Add readonly attribute to all input inside answer part. You can use Expression, this expression was tested before showning the question, value was trimmed before comparing.'),
+                'default'   => "",
+                'expression' => 1,
             ),
         );
         $this->getEvent()->append('questionAttributes', $scriptAttributes);
