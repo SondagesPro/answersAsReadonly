@@ -41,7 +41,7 @@ class answersAsReadonly extends PluginBase
     $aAttributes=QuestionAttribute::model()->getQuestionAttributes($oEvent->get('qid'));
     if(isset($aAttributes['readonly']) && $aAttributes['readonly'] ) {
         $currentReadonly = trim(LimeExpressionManager::ProcessStepString($aAttributes['readonly']));
-        if($currentReadonly) {
+        if($currentReadonly) { // then not "", 0, "0" … 
             $answer = $this->getEvent()->get("answers");
             $answer = str_replace("type=\"text\"","type=\"text\" readonly ",$answer);
             $answer = str_replace("type='text'","type='text' readonly ",$answer);
@@ -89,7 +89,7 @@ class answersAsReadonly extends PluginBase
                 'basePath'    => get_class($this).'.assets',
                 'css'         => array(get_class($this).'.css'),
                 'js'          => array(get_class($this).'.js'),
-                'depends'      =>array( 'limesurvey-public','template-core'),
+                'depends'      =>array('limesurvey-public'),
             ));
         }
         /* Registering the package */
