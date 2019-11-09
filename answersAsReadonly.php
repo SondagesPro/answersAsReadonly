@@ -3,9 +3,9 @@
  * Allow to set answers as readonly in survey
  *
  * @author Denis Chenu <denis@sondages.pro>
- * @copyright 2018 Denis Chenu <http://www.sondages.pro>
+ * @copyright 2018-2019 Denis Chenu <http://www.sondages.pro>
  * @license AGPL v3
- * @version 0.1.0
+ * @version 0.2.0
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE as published by
@@ -30,6 +30,17 @@ class answersAsReadonly extends PluginBase
     {
         $this->subscribe('beforeQuestionRender','setReadonly');
         $this->subscribe('newQuestionAttributes','addReadonlyAttribute');
+        /* For upload file (and maybe other after */
+        $this->subscribe('getPluginTwigPath');
+    }
+
+    /**
+     * Add some views for this and other plugin
+     */
+    public function getPluginTwigPath()
+    {
+        $viewPath = dirname(__FILE__)."/views";
+        $this->getEvent()->append('add', array($viewPath));
     }
 
   /**
@@ -38,6 +49,7 @@ class answersAsReadonly extends PluginBase
   public function setReadonly()
   {
     $oEvent=$this->getEvent();
+    //~ $this->getEvent()->set("text",$this->getEvent()->get("text")." setReadOnly");
     $aAttributes=QuestionAttribute::model()->getQuestionAttributes($oEvent->get('qid'));
     if(isset($aAttributes['readonly']) && $aAttributes['readonly'] ) {
         $currentReadonly = trim(LimeExpressionManager::ProcessStepString($aAttributes['readonly']));
@@ -46,8 +58,45 @@ class answersAsReadonly extends PluginBase
             $answer = str_replace("type=\"text\"","type=\"text\" readonly ",$answer);
             $answer = str_replace("type='text'","type='text' readonly ",$answer);
             $answer = str_replace("<textarea","<textarea readonly ",$answer);
-            $this->getEvent()->set("answers",$answer);
-            $this->getEvent()->set("class",$this->getEvent()->get("class")." answersasreadonly-attribute");
+            /* Remove script for upload */
+            if($oEvent->get('type') == "|") {
+                $answer = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $answer);
+                $sgqa =  $oEvent->get('surveyId')."X".$oEvent->get('gid')."X".$oEvent->get('qid');
+                $currentValue = $_SESSION['survey_'.$oEvent->get('surveyId')][$sgqa];
+                if(!empty($currentValue)) {
+                    $aFiles = @json_decode($currentValue,true);
+                }
+                if(empty($aFiles)) {
+                    $aFiles = array();
+                }
+                foreach($aFiles as $key => $aFile) {
+                    $sFileLink = null;
+                    $sFileDir = null;
+                    if( substr($aFile['filename'], 0, 3) == 'fu_') {
+                        $sFileDir = Yii::app()->getConfig("uploaddir")."/surveys/".$oEvent->get('surveyId')."/files/";
+                    }
+                    if($sFileDir) {
+                        if (is_file($sFileDir.$aFile['filename'])) {
+                            $sFileLink = Yii::app()->createUrl("uploader/run",array('filegetcontents'=>$aFile['filename']));
+                        }
+                    }
+                    $aFiles[$key]['link'] = $sFileLink;
+                    $aFiles[$key]['name'] = CHtml::encode($aFile['name']);
+                    $aFiles[$key]['comment'] = CHtml::encode($aFile['comment']);
+                    $aFiles[$key]['title'] = CHtml::encode($aFile['title']);
+                }
+                $aQuestionsAttributes = QuestionAttribute::model()->getQuestionAttributes($oEvent->get('qid'));
+                $aData = array(
+                    'value' => $currentValue,
+                    'aAttributes' => $aQuestionsAttributes,
+                    'aSurveyInfo'=> getSurveyInfo($oEvent->get('surveyId'), App()->getLanguage()),
+                    'aFiles' => $aFiles,
+                );
+                $htmlExtra = Yii::app()->twigRenderer->renderPartial('./survey/questions/answer/file_upload/answer_readonly_extra.twig', $aData);
+                $answer .= $htmlExtra;
+            }
+            $oEvent->set("answers",$answer);
+            $oEvent->set("class",$this->getEvent()->get("class")." answersasreadonly-attribute");
             $this->answersAsReadonlyAddScript();
         }
     }
@@ -60,6 +109,7 @@ class answersAsReadonly extends PluginBase
     {
         $scriptAttributes = array(
             'readonly' => array(
+                'name'      => 'readonly',
                 'types'     => '15ABCDEFGHIKLMNOPQSTUWYZ!:;|', /* all question types except equation and text display, remove ranking because untested */
                 'category'  => gT('Display'),
                 'sortorder' => 101,

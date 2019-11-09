@@ -1,0 +1,63 @@
+{#
+/**
+ * File upload question Html
+ * @var $fileid
+ * @var $value
+ * @var $filecountvalue
+ */
+#}
+
+<!--answer table -->
+<table width="100%" class="question uploadedfiles table">
+    <thead>
+        <tr>
+        {% if aAttributes.show_title %}
+            <th>{{ gT("Title") }}</th>
+        {% endif %}
+        {% if aAttributes.show_comment %}
+            <th>{{ gT("Comment") }}</th>
+        {% endif %}
+        <th>{{ gT("File name") }}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for aFile in aFiles %}
+        <tr>
+            {% if aAttributes.show_title %}
+                <td>{{ aFile.title }}</td>
+            {% endif %}
+            {% if aAttributes.show_comment %}
+                <td>{{ aFile.comment }}</td>
+            {% endif %}
+            <td>
+                {% if aFile.link %}
+                    <a href="{{ aFile.link }}" download="{{ aFile.name }}">
+                        {{ aFile.name }}
+                    </a>
+                {% else %}
+                    <span>
+                        {{ aFile.name }}
+                        <small>({{ gT('Sorry, this file was not found.') }})</small>
+                    </span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+        {% if count(aFiles) == 0 %}
+            {% set colspan=1 %}
+            {% if aAttributes.show_title %}
+                {% set colspan = colspan + 1 %}
+            {% endif %}
+            {% if aAttributes.show_comment %}
+                {% set colspan = colspan + 1 %}
+            {% endif %}
+            <tr>
+                <td colspan="{{ colspan }}">
+                    {{ gT("No file was uploaded.") }}
+                </td>
+            </tr>
+        {% endif %}
+    </tbody>
+
+</table>
+<!-- end of answer -->

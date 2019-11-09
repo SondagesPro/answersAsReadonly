@@ -13,7 +13,7 @@ Work in prgress :
 - Clone in plugins/answersAsReadonly directory : `git clone https://gitlab.com/SondagesPro/answersAsReadonly.git answersAsReadonly`
 
 ### Via ZIP dowload
-- Get the file [answersAsReadonly.zip](https://extensions.sondages.pro/IMG/auto/answersAsReadonly.zip)
+- Get the file [answersAsReadonly.zip](https://dl.sondages.pro/answersAsReadonly.zip)
 - Extract : `unzip answersAsReadonly.zip`
 - Move the directory to plugins/ directory inside LimeSurvey
 
@@ -23,10 +23,11 @@ Contribution are welcome, for patch and issue : use [gitlab](https://gitlab.com/
 
 ## Home page & Copyright
 - HomePage <http://extensions.sondages.pro/>
-- Copyright © 2016-2018 Denis Chenu <http://sondages.pro> and [contributors](https://gitlab.com/SondagesPro/answersAsReadonly/graphs/master).
+- Copyright © 2018-2019 Denis Chenu <http://sondages.pro> and [contributors](https://gitlab.com/SondagesPro/answersAsReadonly/graphs/master).
 - Licence : GNU Affero General Public License <https://www.gnu.org/licenses/agpl-3.0.html>
 
 ## Changelog
+- 2019-11-09 _0.2.0_ : Show uploaded files and allow dowload
 - 2018-05-21 _0.0.4_ : fix upload
 - 2018-05-21 _0.0.4_ : fix buttons and css
 - 2018-05-21 _0.0.3_ : fix HTML validity

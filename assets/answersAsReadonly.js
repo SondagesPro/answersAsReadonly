@@ -11,7 +11,7 @@ $(document).on("click",".answersasreadonly-attribute .button-item",function() {
     return false;
 });
 $(document).on("keyup keypress keydown",".answersasreadonly-attribute .text-item",function() {
-    //return false; // Diable it : not needed and broke Ctrl + tab
+    //return false; // Disable it : not needed and broke Ctrl + tab
 });
 $(document).on("ready pjax:complete",function() {
     $(".answersasreadonly-attribute .dropdown-item select option").each(function() {
@@ -24,4 +24,5 @@ $(document).on("ready pjax:complete",function() {
         $(this).addClass("disabled");
         $(this).prop("disabled",true);
     });
+
 });
