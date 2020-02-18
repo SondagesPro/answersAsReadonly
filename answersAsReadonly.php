@@ -3,9 +3,9 @@
  * Allow to set answers as readonly in survey
  *
  * @author Denis Chenu <denis@sondages.pro>
- * @copyright 2018-2019 Denis Chenu <http://www.sondages.pro>
+ * @copyright 2018-2020 Denis Chenu <http://www.sondages.pro>
  * @license AGPL v3
- * @version 0.2.0
+ * @version 0.2.1
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE as published by
@@ -59,7 +59,7 @@ class answersAsReadonly extends PluginBase
             $answer = str_replace("type='text'","type='text' readonly ",$answer);
             $answer = str_replace("<textarea","<textarea readonly ",$answer);
             /* Remove script for upload */
-            if($oEvent->get('type') == "|") {
+            if($oEvent->get('type') == "|" && version_compare(Yii::app()->getConfig('versionnumber'),"3.10.0",">=")) {) {
                 $answer = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $answer);
                 $sgqa =  $oEvent->get('surveyId')."X".$oEvent->get('gid')."X".$oEvent->get('qid');
                 $currentValue = $_SESSION['survey_'.$oEvent->get('surveyId')][$sgqa];
@@ -120,6 +120,9 @@ class answersAsReadonly extends PluginBase
                 'expression' => 1,
             ),
         );
+        if(version_compare(Yii::app()->getConfig('versionnumber'),"3.10.0","<")) {
+            $scriptAttributes['readonly']['types'] = '15ABCDEFGHIKLMNOPQSTUWYZ!:;'; // Upload question type need 3.10 and up version
+        }
         $this->getEvent()->append('questionAttributes', $scriptAttributes);
     }
 
