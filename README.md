@@ -2,9 +2,12 @@
 
 This add a new attribute (advanced setting) in each question to set answers part as “read only”. 
 
-Work in prgress : 
-- all question type with all settings didn't work
-- control is done only via html and javascript, no PHP control is done.
+Work in progress : 
+- All question type with all settings didn't work
+- Control is done only via html and javascript, no PHP control is done.
+- You can not use `self` inside Expression.
+
+Plugin are tested in LimeSurvey 3 and can be tested in LimeSurvey 4.
 
 ## Installation
 
@@ -27,6 +30,7 @@ Contribution are welcome, for patch and issue : use [gitlab](https://gitlab.com/
 - Licence : GNU Affero General Public License <https://www.gnu.org/licenses/agpl-3.0.html>
 
 ## Changelog
+- 2020-03-09 _0.3.0_ : Allow usage of in page question : force expression as static.
 - 2019-11-09 _0.2.0_ : Show uploaded files and allow dowload
 - 2018-05-21 _0.0.4_ : fix upload
 - 2018-05-21 _0.0.4_ : fix buttons and css

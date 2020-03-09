@@ -3,9 +3,9 @@
  * Allow to set answers as readonly in survey
  *
  * @author Denis Chenu <denis@sondages.pro>
- * @copyright 2018-2019 Denis Chenu <http://www.sondages.pro>
+ * @copyright 2018-2020 Denis Chenu <http://www.sondages.pro>
  * @license AGPL v3
- * @version 0.2.0
+ * @version 0.3.0
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE as published by
@@ -52,7 +52,12 @@ class answersAsReadonly extends PluginBase
     //~ $this->getEvent()->set("text",$this->getEvent()->get("text")." setReadOnly");
     $aAttributes=QuestionAttribute::model()->getQuestionAttributes($oEvent->get('qid'));
     if(isset($aAttributes['readonly']) && $aAttributes['readonly'] ) {
-        $currentReadonly = trim(LimeExpressionManager::ProcessStepString($aAttributes['readonly']));
+        $aReplacement=array(
+            'QID'=>$oEvent->get('qid'),
+            'GID'=>$oEvent->get('gid'),
+            'SGQ'=>$oEvent->get('surveyId')."X".$oEvent->get('gid')."X".$oEvent->get('qid'),
+        );
+        $currentReadonly = trim(LimeExpressionManager::ProcessStepString($aAttributes['readonly'],$aReplacement,3,1));
         if($currentReadonly) { // then not "", 0, "0" … 
             $answer = $this->getEvent()->get("answers");
             $answer = str_replace("type=\"text\"","type=\"text\" readonly ",$answer);
