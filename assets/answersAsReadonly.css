@@ -11,6 +11,5 @@
 .js .answersasreadonly-attribute td.radio-item,
 .js .answersasreadonly-attribute td.checkbox-item,
 .answersasreadonly-attribute .answer-item {
-    pointer-events: none;
     cursor: not-allowed;
 }
