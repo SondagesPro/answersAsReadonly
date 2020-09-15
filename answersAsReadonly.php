@@ -5,7 +5,7 @@
  * @author Denis Chenu <denis@sondages.pro>
  * @copyright 2018-2020 Denis Chenu <http://www.sondages.pro>
  * @license AGPL v3
- * @version 0.3.1
+ * @version 0.3.2
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE as published by
@@ -31,7 +31,6 @@ class answersAsReadonly extends PluginBase
         $this->subscribe('beforeQuestionRender','setReadonly');
         $this->subscribe('newQuestionAttributes','addReadonlyAttribute');
         /* For upload file (and maybe other after */
-        $this->subscribe('getPluginTwigPath');
     }
 
     /**
@@ -41,6 +40,7 @@ class answersAsReadonly extends PluginBase
     {
         $viewPath = dirname(__FILE__)."/views";
         $this->getEvent()->append('add', array($viewPath));
+        $this->unsubscribe('getPluginTwigPath');
     }
 
   /**
@@ -97,6 +97,7 @@ class answersAsReadonly extends PluginBase
                     'aSurveyInfo'=> getSurveyInfo($oEvent->get('surveyId'), App()->getLanguage()),
                     'aFiles' => $aFiles,
                 );
+                $this->subscribe('getPluginTwigPath');
                 $htmlExtra = Yii::app()->twigRenderer->renderPartial('./survey/questions/answer/file_upload/answer_readonly_extra.twig', $aData);
                 $answer .= $htmlExtra;
             }
