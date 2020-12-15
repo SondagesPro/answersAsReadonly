@@ -4,11 +4,11 @@
         <name>answersAsReadonly</name>
         <type>plugin</type>
         <creationDate>2018-05-20</creationDate>
-        <lastUpdate>2020-03-09</lastUpdate>
+        <lastUpdate>2020-12-15</lastUpdate>
         <author>Denis Chenu</author>
         <authorUrl>https://extensions.sondages.pro/</authorUrl>
         <supportUrl>https://support.sondages.pro/</supportUrl>
-        <version>0.3.0</version>
+        <version>0.3.3</version>
         <license>GNU Affero General Public License v3.0</license>
         <description><![CDATA[Set answer part as readonly with a css and javascript solution.]]></description>
     </metadata>
@@ -18,4 +18,5 @@
         <version>3.0</version>
         <version>4</version>
     </compatibility>
+    <lastSecurityUpdate>0.3.3</lastSecurityUpdate>
 </config>
