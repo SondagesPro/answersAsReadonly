@@ -11,7 +11,7 @@ Plugin are tested in LimeSurvey 2.72, 3 and can be tested in LimeSurvey 4.
 
 With LimeSurvey 2.73 : upload question type are unsupported.
 
-With LimeSurvey 3 and up : Ranking question type are unsupported, MAP question tye are untested.
+With LimeSurvey 3 and up : Ranking question type are unsupported, MAP question type are untested.
 
 ## Installation
 
