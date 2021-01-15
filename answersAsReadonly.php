@@ -5,7 +5,7 @@
  * @author Denis Chenu <denis@sondages.pro>
  * @copyright 2018-2020 Denis Chenu <http://www.sondages.pro>
  * @license AGPL v3
- * @version 0.3.3
+ * @version 0.3.4
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE as published by
@@ -66,7 +66,7 @@ class answersAsReadonly extends PluginBase
             'SGQ'=>$oEvent->get('surveyId')."X".$oEvent->get('gid')."X".$oEvent->get('qid'),
         );
         $currentReadonly = trim(LimeExpressionManager::ProcessStepString($aAttributes['readonly'],$aReplacement,3,1));
-        if(!$aAttributes) {
+        if(empty($currentReadonly)) {
             return;
         }
         $answer = $this->getEvent()->get("answers");
