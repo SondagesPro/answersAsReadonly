@@ -5,7 +5,7 @@
  * @author Denis Chenu <denis@sondages.pro>
  * @copyright 2018-2020 Denis Chenu <http://www.sondages.pro>
  * @license AGPL v3
- * @version 0.3.4
+ * @version 0.3.5
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE as published by
@@ -55,7 +55,6 @@ class answersAsReadonly extends PluginBase
             throw new CHttpException(403);
         }
         $oEvent=$this->getEvent();
-        //~ $this->getEvent()->set("text",$this->getEvent()->get("text")." setReadOnly");
         $aAttributes=QuestionAttribute::model()->getQuestionAttributes($oEvent->get('qid'));
         if(empty($aAttributes['readonly'])) {
             return;
@@ -65,14 +64,16 @@ class answersAsReadonly extends PluginBase
             'GID'=>$oEvent->get('gid'),
             'SGQ'=>$oEvent->get('surveyId')."X".$oEvent->get('gid')."X".$oEvent->get('qid'),
         );
+        $aAttributes['readonly'] = 1;
         $currentReadonly = trim(LimeExpressionManager::ProcessStepString($aAttributes['readonly'],$aReplacement,3,1));
         if(empty($currentReadonly)) {
             return;
         }
-        $answer = $this->getEvent()->get("answers");
+        $answer = $oEvent->get("answers");
         $answer = str_replace("type=\"text\"","type=\"text\" readonly ",$answer);
         $answer = str_replace("type='text'","type='text' readonly ",$answer);
         $answer = str_replace("<textarea","<textarea readonly ",$answer);
+
         /* Remove script for upload */
         if ($oEvent->get('type') == "|" && version_compare(Yii::app()->getConfig('versionnumber'),"3.10.0",">=")) {
             $answer = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $answer);
@@ -112,7 +113,7 @@ class answersAsReadonly extends PluginBase
             $answer .= $htmlExtra;
         }
         $oEvent->set("answers",$answer);
-        $oEvent->set("class",$this->getEvent()->get("class")." answersasreadonly-attribute");
+        $oEvent->set("class",$oEvent->get("class")." answersasreadonly-attribute");
         $this->answersAsReadonlyAddScript();
     }
 
@@ -124,7 +125,8 @@ class answersAsReadonly extends PluginBase
         if (!$this->getEvent()) {
             throw new CHttpException(403);
         }
-        $scriptAttributes = array(
+        $oEvent=$this->getEvent();
+        $readonlyttributes = array(
             'readonly' => array(
                 'name'      => 'readonly',
                 'types'     => '15ABCDEFGHIKLMNOPQSTUWYZ!:;|', /* all question types except equation and text display, remove ranking because untested */
@@ -138,9 +140,9 @@ class answersAsReadonly extends PluginBase
             ),
         );
         if(version_compare(Yii::app()->getConfig('versionnumber'),"3.10.0","<")) {
-            $scriptAttributes['readonly']['types'] = '15ABCDEFGHIKLMNOPQSTUWYZ!:;'; // Upload question type need 3.10 and up version
+            $readonlyttributes['readonly']['types'] = '15ABCDEFGHIKLMNOPQSTUWYZ!:;'; // Upload question type need 3.10 and up version
         }
-        $this->getEvent()->append('questionAttributes', $scriptAttributes);
+        $oEvent->append('questionAttributes', $readonlyttributes);
     }
 
     /**
