@@ -3,9 +3,9 @@
  * Allow to set answers as readonly in survey
  *
  * @author Denis Chenu <denis@sondages.pro>
- * @copyright 2018-2020 Denis Chenu <http://www.sondages.pro>
+ * @copyright 2018-2022 Denis Chenu <http://www.sondages.pro>
  * @license AGPL v3
- * @version 0.3.5
+ * @version 0.3.6
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE as published by
@@ -60,11 +60,10 @@ class answersAsReadonly extends PluginBase
             return;
         }
         $aReplacement=array(
-            'QID'=>$oEvent->get('qid'),
-            'GID'=>$oEvent->get('gid'),
-            'SGQ'=>$oEvent->get('surveyId')."X".$oEvent->get('gid')."X".$oEvent->get('qid'),
+            'QID' => $oEvent->get('qid'),
+            'GID' => $oEvent->get('gid'),
+            'SGQ' => $oEvent->get('surveyId')."X".$oEvent->get('gid')."X".$oEvent->get('qid'),
         );
-        $aAttributes['readonly'] = 1;
         $currentReadonly = trim(LimeExpressionManager::ProcessStepString($aAttributes['readonly'],$aReplacement,3,1));
         if(empty($currentReadonly)) {
             return;
@@ -115,6 +114,7 @@ class answersAsReadonly extends PluginBase
         $oEvent->set("answers",$answer);
         $oEvent->set("class",$oEvent->get("class")." answersasreadonly-attribute");
         $this->answersAsReadonlyAddScript();
+        /* Add the session system if getQuestionInformation is here */
     }
 
     /**
