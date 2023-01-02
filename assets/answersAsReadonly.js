@@ -24,5 +24,16 @@ $(document).on("ready pjax:complete",function() {
         $(this).addClass("disabled");
         $(this).prop("disabled",true);
     });
-
+});
+/* READONlY SLIDER , workaround, set as disable hide all content*/
+$(document).on('ready pjax:complete',function(){
+    $(".answersasreadonly-attribute .slider-item.numeric-item").on('slideStart', function(){
+        let previousVal = $(this).find("input.ls-js-hidden").val();
+        $(this).data("previousValue",previousVal);
+    });
+    $(".answersasreadonly-attribute .slider-item.numeric-item").on('slideStop', function(){
+        let previousVal = $(this).data("previousValue");
+        let sliderid = $(this).attr('id').replace('javatbd','s');
+        window.activeSliders[sliderid].setValue(previousVal);
+    });
 });

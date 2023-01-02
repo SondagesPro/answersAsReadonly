@@ -13,3 +13,6 @@
 .answersasreadonly-attribute .answer-item {
     cursor: not-allowed;
 }
+.answersasreadonly-attribute .slider-item {
+    pointer-events : none;
+}
