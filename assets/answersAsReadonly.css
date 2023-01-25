@@ -16,3 +16,6 @@
 .answersasreadonly-attribute .slider-item {
     pointer-events : none;
 }
+.no-js .answersasreadonly-attribute .answer-item {
+    pointer-events : none;
+}

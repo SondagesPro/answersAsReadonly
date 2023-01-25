@@ -24,6 +24,7 @@ $(document).on("ready pjax:complete",function() {
         $(this).addClass("disabled");
         $(this).prop("disabled",true);
     });
+    $('.answersasreadonly-attribute :radio:not(:checked)').attr('disabled', true);
 });
 /* READONlY SLIDER , workaround, set as disable hide all content*/
 $(document).on('ready pjax:complete',function(){
