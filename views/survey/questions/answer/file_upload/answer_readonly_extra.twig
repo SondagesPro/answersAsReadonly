@@ -24,10 +24,10 @@
         {% for aFile in aFiles %}
         <tr>
             {% if aAttributes.show_title %}
-                <td>{{ aFile.title }}</td>
+                <td>{{ aFile.title|raw }}</td>
             {% endif %}
             {% if aAttributes.show_comment %}
-                <td>{{ aFile.comment }}</td>
+                <td>{{ aFile.comment|raw }}</td>
             {% endif %}
             <td>
                 {% if aFile.link %}

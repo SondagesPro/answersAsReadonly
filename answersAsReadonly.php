@@ -3,9 +3,9 @@
  * Allow to set answers as readonly in survey
  *
  * @author Denis Chenu <denis@sondages.pro>
- * @copyright 2018-2022 Denis Chenu <http://www.sondages.pro>
+ * @copyright 2018-2023 Denis Chenu <http://www.sondages.pro>
  * @license AGPL v3
- * @version 0.3.6
+ * @version 0.3.9
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE as published by
@@ -87,18 +87,27 @@ class answersAsReadonly extends PluginBase
             foreach($aFiles as $key => $aFile) {
                 $sFileLink = null;
                 $sFileDir = null;
-                if( substr($aFile['filename'], 0, 3) == 'fu_') {
-                    $sFileDir = Yii::app()->getConfig("uploaddir")."/surveys/".$oEvent->get('surveyId')."/files/";
+                $aFile['filename'] = preg_replace('/[^a-zA-Z0-9_]/i', '', $aFile['filename']);
+                if(substr($aFile['filename'], 0, 3) == 'fu_') {
+                    $sFileDir = App()->getConfig("uploaddir") . "/surveys/" . $oEvent->get('surveyId') . "/files/";
                 }
                 if($sFileDir) {
-                    if (is_file($sFileDir.$aFile['filename'])) {
-                        $sFileLink = Yii::app()->createUrl("uploader/run",array('filegetcontents'=>$aFile['filename']));
+                    if (is_file($sFileDir . $aFile['filename'])) {
+                        $sFileLink = App()->createUrl(
+                            "uploader/run",
+                            array(
+                                'sid' => $oEvent->get('surveyId'),
+                                'qid' => $oEvent->get('qid'),
+                                'fieldname' => $sgqa,
+                                'filegetcontents' => $aFile['filename']
+                            )
+                        );
                     }
                 }
                 $aFiles[$key]['link'] = $sFileLink;
-                $aFiles[$key]['name'] = CHtml::encode($aFile['name']);
-                $aFiles[$key]['comment'] = CHtml::encode($aFile['comment']);
-                $aFiles[$key]['title'] = CHtml::encode($aFile['title']);
+                $aFiles[$key]['name'] = CHtml::encode(urldecode($aFile['name']));
+                $aFiles[$key]['comment'] = $aFile['comment'];
+                $aFiles[$key]['title'] = $aFile['title'];
             }
             $aQuestionsAttributes = QuestionAttribute::model()->getQuestionAttributes($oEvent->get('qid'));
             $aData = array(
@@ -110,6 +119,11 @@ class answersAsReadonly extends PluginBase
             $this->subscribe('getPluginTwigPath');
             $htmlExtra = Yii::app()->twigRenderer->renderPartial('./survey/questions/answer/file_upload/answer_readonly_extra.twig', $aData);
             $answer .= $htmlExtra;
+        }
+
+        /* slider */
+        if ($oEvent->get('type') == "K" && !empty($aAttributes['slider_layout'])) {
+
         }
         $oEvent->set("answers",$answer);
         $oEvent->set("class",$oEvent->get("class")." answersasreadonly-attribute");
