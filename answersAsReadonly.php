@@ -115,9 +115,15 @@ class answersAsReadonly extends PluginBase
                 'aAttributes' => $aQuestionsAttributes,
                 'aSurveyInfo'=> getSurveyInfo($oEvent->get('surveyId'), App()->getLanguage()),
                 'aFiles' => $aFiles,
+                'language' => array(
+                    "No file was uploaded." => $this->translate("No file was uploaded."),
+                ),
             );
             $this->subscribe('getPluginTwigPath');
-            $htmlExtra = Yii::app()->twigRenderer->renderPartial('./survey/questions/answer/file_upload/answer_readonly_extra.twig', $aData);
+            $htmlExtra = Yii::app()->twigRenderer->renderPartial(
+                './survey/questions/answer/file_upload/answer_readonly_extra.twig',
+                $aData
+            );
             $answer .= $htmlExtra;
         }
 
@@ -182,4 +188,15 @@ class answersAsReadonly extends PluginBase
         /* Registering the package */
         Yii::app()->getClientScript()->registerPackage(get_class($this));
     }
+    /**
+    * @see parent::gT
+    */
+    private function translate($sToTranslate, $sEscapeMode = 'unescaped', $sLanguage = null)
+    {
+        if(is_callable($this, 'gT')) {
+            return $this->gT($sToTranslate, $sEscapeMode, $sLanguage);
+        }
+        return $sToTranslate;
+    }
+
 }
