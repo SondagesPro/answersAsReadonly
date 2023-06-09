@@ -1,11 +1,12 @@
 <?php
+
 /**
  * Allow to set answers as readonly in survey
  *
  * @author Denis Chenu <denis@sondages.pro>
  * @copyright 2018-2023 Denis Chenu <http://www.sondages.pro>
  * @license AGPL v3
- * @version 0.3.9
+ * @version 0.4.0
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE as published by
@@ -20,16 +21,16 @@
 class answersAsReadonly extends PluginBase
 {
 
-  static protected $name = 'answersAsReadonly';
-  static protected $description = 'Allow to set input as readonly in answer, warning : no PHP control is done.';
+    protected static $name = 'answersAsReadonly';
+    protected static $description = 'Allow to set input as readonly in answer, warning : no PHP control is done.';
 
     /**
     * Add function to be used in beforeQuestionRender event and to attriubute
     */
     public function init()
     {
-        $this->subscribe('beforeQuestionRender','setReadonly');
-        $this->subscribe('newQuestionAttributes','addReadonlyAttribute');
+        $this->subscribe('beforeQuestionRender');
+        $this->subscribe('newQuestionAttributes', 'addReadonlyAttribute');
         /* For upload file (and maybe other after */
     }
 
@@ -41,9 +42,23 @@ class answersAsReadonly extends PluginBase
         if (!$this->getEvent()) {
             throw new CHttpException(403);
         }
-        $viewPath = dirname(__FILE__)."/views";
+        $viewPath = dirname(__FILE__) . "/views";
         $this->getEvent()->append('add', array($viewPath));
         $this->unsubscribe('getPluginTwigPath');
+    }
+
+    public function beforeQuestionRender()
+    {
+        $this->unsubscribe('beforeQuestionRender');
+        $oEvent = $this->getEvent();
+        if (
+            Permission::model()->hasSurveyPermission($oEvent->get('surveyId'), 'surveycontent', 'read')
+            && (App()->getRequest()->getQuery('action') == 'previewgroup' || App()->getRequest()->getQuery('action') == 'previewgroup')
+        ) {
+            return;
+        }
+        $this->setReadonly();
+        $this->subscribe('beforeQuestionRender','setReadonly');
     }
 
     /**
@@ -55,6 +70,7 @@ class answersAsReadonly extends PluginBase
             throw new CHttpException(403);
         }
         $oEvent=$this->getEvent();
+
         $aAttributes=QuestionAttribute::model()->getQuestionAttributes($oEvent->get('qid'));
         if(empty($aAttributes['readonly'])) {
             return;
