@@ -13,6 +13,9 @@
 .answersasreadonly-attribute .answer-item {
     cursor: not-allowed;
 }
+.answersasreadonly-attribute .answer-item label, .answersasreadonly-attribute ul li.answer-item label, .answersasreadonly-attribute tr td.answer-item label{
+    cursor: not-allowed;
+}
 .answersasreadonly-attribute .slider-item {
     pointer-events : none;
 }

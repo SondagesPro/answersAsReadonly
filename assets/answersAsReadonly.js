@@ -1,5 +1,5 @@
 /* This file is part of answersAsReadonly limesurvey plugin distributed as AGPL */
-/* @version 0.3.11 */
+/* @version 0.4.1 */
 /* This file is distributed with a CC0 licence */
 /* @license magnet:?xt=urn:btih:90dc5c0be029de84e523b9b3922520e79e0e6f08&dn=cc0.txt CC0 */
 'use strict';
@@ -27,6 +27,9 @@ $(function() {
         $(this).prop('disabled',true);
     });
     $('.answersasreadonly-attribute :radio:not(:checked)').attr('disabled', true);
+    $('.answersasreadonly-attribute .checkbox-item').off('click').on("click",function() { return false; });
+    $('.answersasreadonly-attribute .radio-item').off('click').on("click",function() { return false; });
+    $('.answersasreadonly-attribute .button-item').off('click').on("click",function() { return false; });
 });
 /* READONlY SLIDER , workaround, set as disable hide all content*/
 $(function() {
