@@ -4,9 +4,9 @@
  * Allow to set answers as readonly in survey
  *
  * @author Denis Chenu <denis@sondages.pro>
- * @copyright 2018-2023 Denis Chenu <http://www.sondages.pro>
+ * @copyright 2018-2024 Denis Chenu <http://www.sondages.pro>
  * @license AGPL v3
- * @version 0.4.0
+ * @version 0.5.0
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE as published by
@@ -209,6 +209,7 @@ class answersAsReadonly extends PluginBase
     */
     private function translate($sToTranslate, $sEscapeMode = 'unescaped', $sLanguage = null)
     {
+        tracevar(is_callable($this, 'gT'));
         if(is_callable($this, 'gT')) {
             return $this->gT($sToTranslate, $sEscapeMode, $sLanguage);
         }
