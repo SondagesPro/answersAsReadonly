@@ -4,9 +4,9 @@
  * Allow to set answers as readonly in survey
  *
  * @author Denis Chenu <denis@sondages.pro>
- * @copyright 2018-2024 Denis Chenu <http://www.sondages.pro>
+ * @copyright 2018-2025 Denis Chenu <http://www.sondages.pro>
  * @license AGPL v3
- * @version 0.5.0
+ * @version 0.5.1
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE as published by
@@ -166,7 +166,7 @@ class answersAsReadonly extends PluginBase
             'readonly' => array(
                 'name'      => 'readonly',
                 'types'     => '15ABCDEFGHIKLMNOPQSTUWYZ!:;|', /* all question types except equation and text display, remove ranking because untested */
-                'category'  => gT('Display'),
+                'category'  => 'Display',
                 'sortorder' => 101,
                 'inputtype' => 'text',
                 'caption'   => $this->gT('Show as readonly'),
