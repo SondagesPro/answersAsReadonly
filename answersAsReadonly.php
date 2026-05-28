@@ -4,9 +4,9 @@
  * Allow to set answers as readonly in survey
  *
  * @author Denis Chenu <denis@sondages.pro>
- * @copyright 2018-2025 Denis Chenu <http://www.sondages.pro>
+ * @copyright 2018-2026 Denis Chenu <http://www.sondages.pro>
  * @license AGPL v3
- * @version 0.5.1
+ * @version 0.6.0
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE as published by
@@ -92,8 +92,13 @@ class answersAsReadonly extends PluginBase
         /* Remove script for upload */
         if ($oEvent->get('type') == "|" && version_compare(Yii::app()->getConfig('versionnumber'),"3.10.0",">=")) {
             $answer = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $answer);
-            $sgqa =  $oEvent->get('surveyId')."X".$oEvent->get('gid')."X".$oEvent->get('qid');
-            $currentValue = $_SESSION['survey_'.$oEvent->get('surveyId')][$sgqa];
+            if (intval(App()->getConfig('versionnumber')) >= 7) {
+                $sgqa = "Q".$oEvent->get('qid');
+                $currentValue = $_SESSION['responses_'.$oEvent->get('surveyId')][$sgqa];
+            } else { // Pre-7 version
+                $sgqa =  $oEvent->get('surveyId')."X".$oEvent->get('gid')."X".$oEvent->get('qid');
+                $currentValue = $_SESSION['survey_'.$oEvent->get('surveyId')][$sgqa];
+            }
             if(!empty($currentValue)) {
                 $aFiles = @json_decode($currentValue,true);
             }
@@ -145,7 +150,7 @@ class answersAsReadonly extends PluginBase
 
         /* slider */
         if ($oEvent->get('type') == "K" && !empty($aAttributes['slider_layout'])) {
-
+            // TODO
         }
         $oEvent->set("answers",$answer);
         $oEvent->set("class",$oEvent->get("class")." answersasreadonly-attribute");
@@ -209,7 +214,6 @@ class answersAsReadonly extends PluginBase
     */
     private function translate($sToTranslate, $sEscapeMode = 'unescaped', $sLanguage = null)
     {
-        tracevar(is_callable($this, 'gT'));
         if(is_callable($this, 'gT')) {
             return $this->gT($sToTranslate, $sEscapeMode, $sLanguage);
         }
